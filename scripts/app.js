@@ -1,13 +1,20 @@
 const cityForm = document.querySelector('form');
 const card = document.querySelector('.card');
 const details = document.querySelector('.details');
+const time = document.querySelector('.time');
+const icon = document.querySelector('.icon img');
 
 const updateUI = (data) => {
     // making a variable = the cityDets and weather properties we passed from updateCity
-    const cityDets = data.cityDets;
-    const weather = data.weather;
+    // this is the old way of getting elements from objects and storing them to use later
+    // const cityDets = data.cityDets;
+    // const weather = data.weather;
 
-    //update details template
+    // destructure properties
+    // what this does is it takes a property called cityDets and weather, and assigns them to variables called cityDets and weather. This is a faster way of pulling properties from the data object and storing it in consts seperatly
+    const { cityDets, weather } = data;
+
+    // update details template
     details.innerHTML = `
         <h5 class="my-3">${cityDets.EnglishName}</h5>
         <div class="my-3">${weather.WeatherText}</div>
@@ -15,6 +22,16 @@ const updateUI = (data) => {
             <span>${weather.Temperature.Imperial.Value}</span>
             <span>&deg;F</span>
     `;
+
+    // update the night/day & icon images
+    const iconSrc = `img/icons/${weather.WeatherIcon}.svg`;
+    icon.setAttribute('src', iconSrc);
+
+    let timeSrc = null;
+    // this is a ternary operator, which lets us assign a variable 1 of 2 values based on a condition
+    // the way these work are as follows: [variable] = [condition] ? value1 : value2
+    timeSrc = weather.IsDayTime ? 'img/day.svg' : 'img/night.svg';
+    time.setAttribute('src', timeSrc);
 
     // remove the d-none class if present
     if (card.classList.contains('d-none')) {
@@ -57,4 +74,4 @@ cityForm.addEventListener('submit', e => {
     updateCity(city)
         .then(data => updateUI(data))
         .catch(err => console.log(err));
-})
+});
