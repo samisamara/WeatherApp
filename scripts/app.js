@@ -3,6 +3,8 @@ const card = document.querySelector('.card');
 const details = document.querySelector('.details');
 const time = document.querySelector('.time');
 const icon = document.querySelector('.icon img');
+// the forecast const was added to make this code object oriented, rather than running on functions alone
+const forecast = new Forecast();
 
 const updateUI = (data) => {
     // making a variable = the cityDets and weather properties we passed from updateCity
@@ -40,6 +42,7 @@ const updateUI = (data) => {
 
 };
 
+/* This is the first way of coding this function. We changed the software to be object oriented.
 const updateCity = async (city) => {
     
     // We can call functions from different files because forecast.js is defined before app.js in index.html
@@ -60,6 +63,7 @@ const updateCity = async (city) => {
         weather
     };
 }
+*/
 
 cityForm.addEventListener('submit', e => {
     // prevent default action
@@ -71,7 +75,8 @@ cityForm.addEventListener('submit', e => {
 
     // update the ui with new city
     // updateCity will return the object as the data, so we call the result from the function "data"
-    updateCity(city)
+    // UPDATE: this code was slightly altered to be object oriented. Added "forecast.***" to call Forecast's updateCity func.
+    forecast.updateCity(city)
         .then(data => updateUI(data))
         .catch(err => console.log(err));
 
@@ -81,8 +86,10 @@ cityForm.addEventListener('submit', e => {
 
 });
 
+// UPDATE: this code was slightly altered to be object oriented. Added "forecast.***" to call Forecast's updateCity func.
 if (localStorage.getItem('city')) {
-    updateCity(localStorage.getItem('city'))
+    forecast.updateCity(localStorage.getItem('city'))
     .then(data => updateUI(data))
-    .catch(console.log(err));
+    .catch(err => console.log(err));
 }
+
